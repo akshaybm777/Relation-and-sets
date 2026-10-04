@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structural Relations Between Distinct Sets</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- MathJax for TeX math rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        code, pre { font-family: 'Fira Code', monospace; }
+        .grid-cell-active { background-color: #4f46e5; color: white; }
+        .grid-cell-inactive { background-color: #f3f4f6; color: #6b7280; }
+        .grid-cell-inactive:hover { background-color: #e5e7eb; }
+        .node-hover { stroke: #4f46e5; stroke-width: 3px; }
+        .edge-active { stroke: #4f46e5; stroke-width: 2.5; opacity: 0.85; }
+        .edge-inactive { stroke: #e5e7eb; stroke-width: 1; opacity: 0.3; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-indigo-200">
+                    <i class="fa-solid font-mono text-sm">A×B</i>
+                </div>
+                <div>
+                    <span class="text-lg font-bold text-slate-900 tracking-tight block leading-none">Structural Relations</span>
+                    <span class="text-xs text-indigo-600 font-medium tracking-wide uppercase">Math to Relational Databases</span>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center space-x-1 lg:space-x-6 text-sm font-medium text-slate-600">
+                <a href="#theory" class="hover:text-indigo-600 transition-colors px-2 py-1">Theory</a>
+                <a href="#examples" class="hover:text-indigo-600 transition-colors px-2 py-1">Examples</a>
+                <a href="#interactive-tool" class="hover:text-indigo-600 transition-colors px-2 py-1">Interactive Tool</a>
+                <a href="#experiments" class="hover:text-indigo-600 transition-colors px-2 py-1">Experiments</a>
+                <a href="#quiz" class="hover:text-indigo-600 transition-colors px-2 py-1">Practice Quiz</a>
+            </nav>
+            <a href="#interactive-tool" class="inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-lg transition shadow-sm">
+                <i class="fa-solid fa-play text-xs"></i>
+                <span>Launch Tool</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-b from-indigo-900 via-slate-900 to-slate-900 text-white py-16 lg:py-24">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <span class="inline-flex items-center gap-2 px-3 me-2 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 mb-6">
+                <i class="fa-solid fa-diagram-project"></i> Discrete Mathematics &amp; SQL Data Modeling
+            </span>
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight max-w-4xl mx-auto leading-tight">
+                Finding Structural Relations Between <span class="bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">Distinct Sets</span>
+            </h1>
+            <p class="mt-6 text-base sm:text-lg text-slate-300 max-w-2xl mx-auto font-normal">
+                Bridge abstract mathematical set theory and modern database engineering. Explore how Cartesian products $A \times B$, binary relations $R$, matrices, digraphs, and foreign key junction tables connect.
+            </p>
+            <div class="mt-8 flex flex-wrap justify-center gap-4">
+                <a href="#interactive-tool" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-6 py-3 rounded-xl shadow-lg shadow-indigo-600/30 transition duration-200 flex items-center space-x-2">
+                    <span>Explore Relation Generator</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+                <a href="#theory" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold px-6 py-3 rounded-xl border border-slate-700 transition duration-200">
+                    Read Foundations
+                </a>
+            </div>
+            
+            <!-- Key Metric Badges -->
+            <div class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-left">
+                <div class="bg-slate-800/80 border border-slate-700/60 p-4 rounded-xl backdrop-blur-sm">
+                    <div class="text-indigo-400 font-semibold text-xs uppercase tracking-wider">Cartesian Product</div>
+                    <div class="text-xl font-bold mt-1 text-white">$A \times B$</div>
+                    <p class="text-xs text-slate-400 mt-1">All possible ordered pairs $(a,b)$</p>
+                </div>
+                <div class="bg-slate-800/80 border border-slate-700/60 p-4 rounded-xl backdrop-blur-sm">
+                    <div class="text-indigo-400 font-semibold text-xs uppercase tracking-wider">Binary Relation</div>
+                    <div class="text-xl font-bold mt-1 text-white">$R \subseteq A \times B$</div>
+                    <p class="text-xs text-slate-400 mt-1">Any valid subset of ordered pairs</p>
+                </div>
+                <div class="bg-slate-800/80 border border-slate-700/60 p-4 rounded-xl backdrop-blur-sm">
+                    <div class="text-indigo-400 font-semibold text-xs uppercase tracking-wider">Total Relations</div>
+                    <div class="text-xl font-bold mt-1 text-white">$2^{|A| \cdot |B|}$</div>
+                    <p class="text-xs text-slate-400 mt-1">Exponential state space cardinality</p>
+                </div>
+                <div class="bg-slate-800/80 border border-slate-700/60 p-4 rounded-xl backdrop-blur-sm">
+                    <div class="text-indigo-400 font-semibold text-xs uppercase tracking-wider">SQL Table Mapping</div>
+                    <div class="text-xl font-bold mt-1 text-white">Junction Tables</div>
+                    <p class="text-xs text-slate-400 mt-1">Many-to-Many foreign key schema</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Theory Section -->
+    <section id="theory" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-xs uppercase font-bold text-indigo-600 tracking-wider">Foundational Concepts</h2>
+            <p class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Theoretical Framework &amp; Dual Representations</p>
+            <p class="text-slate-600 mt-2 text-sm sm:text-base">Understanding how connections between two distinct sets are defined mathematically and represented in data structures.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Concept 1 -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-lg mb-4">
+                    1
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Cartesian Product ($A \times B$)</h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-3">
+                    Given two sets $A$ and $B$, their Cartesian product $A \times B$ is the set of all ordered pairs $(a, b)$ where $a \in A$ and $b \in B$.
+                </p>
+                <div class="bg-slate-50 p-3 rounded-lg text-xs font-mono text-slate-700 border border-slate-200 mb-2">
+                    $$A \times B = \{(a,b) \mid a \in A \land b \in B\}$$
+                </div>
+                <p class="text-xs text-slate-500">Cardinality rule: $|A \times B| = |A| \cdot |B|$.</p>
+            </div>
+
+            <!-- Concept 2 -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-lg mb-4">
+                    2
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Binary Relation ($R \subseteq A \times B$)</h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-3">
+                    A binary relation $R$ from $A$ to $B$ is a subset of $A \times B$. If $(a,b) \in R$, we write $a R b$, meaning element $a$ is related to $b$.
+                </p>
+                <div class="bg-slate-50 p-3 rounded-lg text-xs font-mono text-slate-700 border border-slate-200 mb-2">
+                    $$R \subseteq A \times B \quad \text{where} \quad a R b \iff (a,b) \in R$$
+                </div>
+                <p class="text-xs text-slate-500">Total unique relations from $A$ to $B$ is $2^{|A| \cdot |B|}$.</p>
+            </div>
+
+            <!-- Concept 3 -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-lg mb-4">
+                    3
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Domain, Codomain, Range</h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-3">
+                    The <strong>Domain</strong> is set $A$. The <strong>Codomain</strong> is set $B$. The <strong>Range</strong> (or Image) is the actual set of elements in $B$ that are assigned by $R$.
+                </p>
+                <div class="bg-slate-50 p-3 rounded-lg text-xs font-mono text-slate-700 border border-slate-200 mb-2">
+                    $$\text{Ran}(R) = \{b \in B \mid \exists a \in A, (a,b) \in R\}$$
+                </div>
+                <p class="text-xs text-slate-500">The Range is always a subset of the Codomain: $\text{Ran}(R) \subseteq B$.</p>
+            </div>
+
+            <!-- Concept 4 -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-lg mb-4">
+                    4
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Matrix Representation ($M_R$)</h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-3">
+                    A binary relation $R$ can be represented as a boolean matrix $M_R$ of dimension $|A| \times |B|$ where entry $m_{ij} = 1$ if $(a_i, b_j) \in R$, else $0$.
+                </p>
+                <div class="bg-slate-50 p-3 rounded-lg text-xs font-mono text-slate-700 border border-slate-200 mb-2">
+                    $$M_{ij} = \begin{cases} 1 & \text{if } (a_i, b_j) \in R \\ 0 & \text{otherwise} \end{cases}$$
+                </div>
+                <p class="text-xs text-slate-500">Matrix operations allow fast relational composition & graph algorithms.</p>
+            </div>
+
+            <!-- Concept 5 -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-lg mb-4">
+                    5
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Bipartite Digraph View</h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-3">
+                    Visualized as a directed bipartite graph with vertices partitioned into two disjoint sets $V_1 = A$ and $V_2 = B$, with directed edges going strictly from $A \to B$.
+                </p>
+                <div class="bg-slate-50 p-3 rounded-lg text-xs font-mono text-slate-700 border border-slate-200 mb-2">
+                    $$G = (A \cup B, E), \quad E = \{(a,b) \mid (a,b) \in R\}$$
+                </div>
+                <p class="text-xs text-slate-500">In-degree & out-degree indicate injection and surjection properties.</p>
+            </div>
+
+            <!-- Concept 6 -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-lg mb-4">
+                    6
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Relational Database Mapping</h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-3">
+                    In SQL RDBMS design, a binary relation between distinct entity sets $A$ and $B$ corresponds directly to a <strong>junction table</strong> with composite primary keys.
+                </p>
+                <div class="bg-slate-50 p-3 rounded-lg text-xs font-mono text-slate-700 border border-slate-200 mb-2">
+                    <code>PRIMARY KEY (a_id, b_id)</code>
+                </div>
+                <p class="text-xs text-slate-500">Foreign keys enforce referential integrity to entity tables $A$ and $B$.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Worked Examples Section -->
+    <section id="examples" class="py-16 bg-slate-100/70 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-xs uppercase font-bold text-indigo-600 tracking-wider">Concrete Applications</h2>
+                <p class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">3 Detailed Worked Examples</p>
+                <p class="text-slate-600 mt-2 text-sm sm:text-base">Step-by-step transformations from discrete math sets to database implementation schemas.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Example 1 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col overflow-hidden">
+                    <div class="bg-indigo-600 text-white p-4">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-indigo-200">Example 1</span>
+                        <h3 class="text-lg font-bold mt-1">Student-Course Enrollment</h3>
+                        <p class="text-xs text-indigo-100">Many-to-Many ($S \times C$)</p>
+                    </div>
+                    <div class="p-5 flex-1 space-y-4 text-sm">
+                        <div>
+                            <p class="font-semibold text-slate-900">Set Definitions:</p>
+                            <p class="text-slate-600 text-xs font-mono mt-1">$S = \{\text{Alice, Bob, Charlie}\}$</p>
+                            <p class="text-slate-600 text-xs font-mono mt-0.5">$C = \{\text{CS101, MATH202, PHYS301}\}$</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-slate-900">Relation Rule $R$:</p>
+                            <p class="text-xs text-slate-600 mt-1">"Student $s$ is enrolled in Course $c$"</p>
+                            <p class="text-xs text-indigo-700 font-mono mt-1 bg-indigo-50 p-2 rounded border border-indigo-100">
+                                $R = \{(\text{Alice, CS101}), (\text{Alice, MATH202}), (\text{Bob, CS101}), (\text{Charlie, PHYS301})\}$
+                            </p>
+                        </div>
+                        <div class="pt-2 border-t border-slate-100">
+                            <p class="font-semibold text-slate-900 mb-1">SQL Junction Schema:</p>
+                            <pre class="bg-slate-900 text-slate-200 p-2.5 rounded-lg text-xs overflow-x-auto"><code>CREATE TABLE Student_Courses (
+  student_id VARCHAR(20),
+  course_code VARCHAR(20),
+  PRIMARY KEY (student_id, course_code),
+  FOREIGN KEY (student_id) REFERENCES Students(id),
+  FOREIGN KEY (course_code) REFERENCES Courses(code)
+);</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Example 2 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col overflow-hidden">
+                    <div class="bg-slate-800 text-white p-4">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Example 2</span>
+                        <h3 class="text-lg font-bold mt-1">Numerical Divisibility</h3>
+                        <p class="text-xs text-slate-300">Arithmetic Relation ($a \mid b$)</p>
+                    </div>
+                    <div class="p-5 flex-1 space-y-4 text-sm">
+                        <div>
+                            <p class="font-semibold text-slate-900">Set Definitions:</p>
+                            <p class="text-slate-600 text-xs font-mono mt-1">$A = \{2, 3, 4\}$</p>
+                            <p class="text-slate-600 text-xs font-mono mt-0.5">$B = \{4, 6, 8, 9, 12\}$</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-slate-900">Relation Rule $R$:</p>
+                            <p class="text-xs text-slate-600 mt-1">"a divides b ($b \pmod a = 0$)"</p>
+                            <p class="text-xs text-indigo-700 font-mono mt-1 bg-indigo-50 p-2 rounded border border-indigo-100">
+                                $R = \{(2,4), (2,6), (2,8), (2,12), (3,6), (3,9), (3,12), (4,4), (4,8), (4,12)\}$
+                            </p>
+                        </div>
+                        <div class="pt-2 border-t border-slate-100">
+                            <p class="font-semibold text-slate-900 mb-1">Cartesian Reduction:</p>
+                            <p class="text-xs text-slate-600">
+                                $|A \times B| = 3 \times 5 = 15$ potential pairs.
+                                $|R| = 10$ active relations.
+                                Matrix density: $\frac{10}{15} \approx 66.7\%$.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Example 3 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col overflow-hidden">
+                    <div class="bg-emerald-700 text-white p-4">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-emerald-200">Example 3</span>
+                        <h3 class="text-lg font-bold mt-1">E-Commerce User Purchases</h3>
+                        <p class="text-xs text-emerald-100">User to Product Mapping ($U \times P$)</p>
+                    </div>
+                    <div class="p-5 flex-1 space-y-4 text-sm">
+                        <div>
+                            <p class="font-semibold text-slate-900">Set Definitions:</p>
+                            <p class="text-slate-600 text-xs font-mono mt-1">$U = \{\text{U101, U102, U103}\}$</p>
+                            <p class="text-slate-600 text-xs font-mono mt-0.5">$P = \{\text{Laptop, Phone, Headphones}\}$</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-slate-900">Relation Rule $R$:</p>
+                            <p class="text-xs text-slate-600 mt-1">"User $u$ has purchased Product $p$"</p>
+                            <p class="text-xs text-indigo-700 font-mono mt-1 bg-indigo-50 p-2 rounded border border-indigo-100">
+                                $R = \{(\text{U101, Laptop}), (\text{U101, Phone}), (\text{U102, Headphones})\}$
+                            </p>
+                        </div>
+                        <div class="pt-2 border-t border-slate-100">
+                            <p class="font-semibold text-slate-900 mb-1">Range &amp; Inactivity Analysis:</p>
+                            <p class="text-xs text-slate-600">
+                                $\text{Dom}(R) = \{\text{U101, U102}\}$ (U103 inactive).<br>
+                                $\text{Ran}(R) = \{\text{Laptop, Phone, Headphones}\} = P$ (Surjective).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Relation Tool Section -->
+    <section id="interactive-tool" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-10">
+            <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-indigo-100 text-indigo-700">Live Simulator</span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-2">Interactive Relation Builder</h2>
+            <p class="text-slate-600 text-sm sm:text-base mt-2">Modify sets $A$ and $B$, select arithmetic rule presets, or click matrix cells to dynamically update the bipartite directed graph and SQL code.</p>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 lg:p-8 space-y-8">
+            <!-- Inputs & Presets Control Panel -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                <div class="lg:col-span-4 space-y-3">
+                    <label for="inputSetA" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Set A Elements (Domain)</label>
+                    <input type="text" id="inputSetA" value="1, 2, 3, 4" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                    <span class="text-[11px] text-slate-500">Comma separated values (e.g., 1, 2, 3)</span>
+                </div>
+                <div class="lg:col-span-4 space-y-3">
+                    <label for="inputSetB" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Set B Elements (Codomain)</label>
+                    <input type="text" id="inputSetB" value="2, 4, 6" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                    <span class="text-[11px] text-slate-500">Comma separated values (e.g., 2, 4, 6)</span>
+                </div>
+                <div class="lg:col-span-4 space-y-3">
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Rule Presets</label>
+                    <div class="flex flex-wrap gap-1.5">
+                        <button onclick="applyPreset('divides')" class="px-2.5 py-1.5 bg-white border border-slate-300 hover:border-indigo-500 hover:text-indigo-600 rounded-lg text-xs font-medium transition">
+                            $a \mid b$
+                        </button>
+                        <button onclick="applyPreset('less')" class="px-2.5 py-1.5 bg-white border border-slate-300 hover:border-indigo-500 hover:text-indigo-600 rounded-lg text-xs font-medium transition">
+                            $a < b$
+                        </button>
+                        <button onclick="applyPreset('equal')" class="px-2.5 py-1.5 bg-white border border-slate-300 hover:border-indigo-500 hover:text-indigo-600 rounded-lg text-xs font-medium transition">
+                            $a = b$
+                        </button>
+                        <button onclick="applyPreset('greater')" class="px-2.5 py-1.5 bg-white border border-slate-300 hover:border-indigo-500 hover:text-indigo-600 rounded-lg text-xs font-medium transition">
+                            $a > b$
+                        </button>
+                        <button onclick="applyPreset('universal')" class="px-2.5 py-1.5 bg-indigo-50 border border-indigo-200 text-indigo-700 rounded-lg text-xs font-semibold hover:bg-indigo-100 transition">
+                            All ($A \times B$)
+                        </button>
+                        <button onclick="applyPreset('empty')" class="px-2.5 py-1.5 bg-slate-100 border border-slate-300 text-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 transition">
+                            Clear ($\emptyset$)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization Dual Panel: Matrix Grid & SVG Digraph -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Matrix Grid Container -->
+                <div class="lg:col-span-5 bg-white border border-slate-200 rounded-2xl p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-table-cells text-indigo-600"></i> Relation Matrix $M_R$
+                            </h3>
+                            <span class="text-xs text-slate-500">Click cells to toggle (0/1)</span>
+                        </div>
+                        <div class="overflow-x-auto pb-2">
+                            <div id="matrixContainer" class="inline-block min-w-full">
+                                <!-- Matrix generated via JS -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 flex justify-between">
+                        <span>Rows: Set $A$ ($a \in A$)</span>
+                        <span>Cols: Set $B$ ($b \in B$)</span>
+                    </div>
+                </div>
+
+                <!-- SVG Bipartite Digraph Container -->
+                <div class="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-5 flex flex-col">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-diagram-successor text-indigo-600"></i> Bipartite Directed Graph ($A \to B$)
+                        </h3>
+                        <span class="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-full font-medium">Interactive Arrows</span>
+                    </div>
+                    <div class="w-full flex-1 min-h-[300px] relative bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-center p-2">
+                        <svg id="digraphSvg" class="w-full h-full min-h-[280px]" preserveAspectRatio="xMidYMid meet"></svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-Time Relation Analysis Dashboard -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-indigo-50/60 border border-indigo-100 p-4 rounded-xl">
+                    <span class="text-xs font-bold uppercase text-indigo-600">Cartesian Capacity</span>
+                    <div class="text-xl font-bold text-slate-900 mt-1" id="analysisCartesian">0</div>
+                    <p class="text-xs text-slate-500 mt-0.5">$|A \times B| = |A| \cdot |B|$</p>
+                </div>
+                <div class="bg-indigo-50/60 border border-indigo-100 p-4 rounded-xl">
+                    <span class="text-xs font-bold uppercase text-indigo-600">Active Relation Size</span>
+                    <div class="text-xl font-bold text-indigo-700 mt-1" id="analysisRelationSize">0</div>
+                    <p class="text-xs text-slate-500 mt-0.5">$|R| \le |A \times B|$</p>
+                </div>
+                <div class="bg-indigo-50/60 border border-indigo-100 p-4 rounded-xl">
+                    <span class="text-xs font-bold uppercase text-indigo-600">Range $\text{Ran}(R)$</span>
+                    <div class="text-sm font-bold text-slate-900 mt-1 font-mono truncate" id="analysisRange">{}</div>
+                    <p class="text-xs text-slate-500 mt-0.5">Active targets in Codomain $B$</p>
+                </div>
+                <div class="bg-indigo-50/60 border border-indigo-100 p-4 rounded-xl">
+                    <span class="text-xs font-bold uppercase text-indigo-600">Function Test</span>
+                    <div class="text-sm font-bold text-slate-900 mt-1 flex items-center gap-1.5" id="analysisFunction">
+                        <!-- Badges set via JS -->
+                    </div>
+                    <p class="text-xs text-slate-500 mt-0.5" id="analysisFunctionDesc">Evaluates if $R$ is a valid function $A \to B$</p>
+                </div>
+            </div>
+
+            <!-- SQL Generator Box -->
+            <div class="bg-slate-900 rounded-2xl p-5 text-slate-200">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-database text-indigo-400"></i>
+                        <h4 class="text-sm font-bold text-white uppercase tracking-wider">Dynamic SQL Junction Table Export</h4>
+                    </div>
+                    <button onclick="copySqlToClipboard()" class="text-xs bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-slate-700 px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
+                        <i class="fa-regular fa-copy"></i>
+                        <span id="copyBtnText">Copy SQL</span>
+                    </button>
+                </div>
+                <pre class="bg-slate-950 p-4 rounded-xl text-xs sm:text-sm font-mono text-emerald-400 overflow-x-auto border border-slate-800"><code id="sqlOutput">-- SQL Query Generator Initializing...</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experiments Section -->
+    <section id="experiments" class="py-16 bg-slate-100/80 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-xs uppercase font-bold text-indigo-600 tracking-wider">Interactive Explorations</h2>
+                <p class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Experiments &amp; SQL Join Simulator</p>
+                <p class="text-slate-600 mt-2 text-sm sm:text-base">Deepen intuition with combinatorial growth calculators and relational database JOIN logic.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+                <!-- Experiment 1: Exponential State Space -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-calculator"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900">1. Relation State Space Explorer</h3>
+                            <p class="text-xs text-slate-500">Exponential growth of total binary relations $2^{|A| \cdot |B|}$</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs font-semibold mb-1">
+                                <span>Cardinality $|A|$: <span id="valCardA" class="text-indigo-600">3</span></span>
+                            </div>
+                            <input type="range" id="sliderA" min="1" max="6" value="3" oninput="updateCombinatorics()" class="w-full accent-indigo-600">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs font-semibold mb-1">
+                                <span>Cardinality $|B|$: <span id="valCardB" class="text-indigo-600">3</span></span>
+                            </div>
+                            <input type="range" id="sliderB" min="1" max="6" value="3" oninput="updateCombinatorics()" class="w-full accent-indigo-600">
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 grid grid-cols-2 gap-3 text-center">
+                        <div>
+                            <div class="text-xs text-slate-500">Cartesian Size ($|A \times B|$)</div>
+                            <div id="resCartesianSize" class="text-lg font-bold text-slate-900">9</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-500">Total Possible Relations</div>
+                            <div id="resTotalRelations" class="text-lg font-bold text-indigo-600">512 ($2^9$)</div>
+                        </div>
+                        <div class="col-span-2 pt-2 border-t border-slate-200">
+                            <div class="text-xs text-slate-500">Total Valid Functions ($|B|^{|A|}$)</div>
+                            <div id="resTotalFunctions" class="text-sm font-bold text-emerald-600 mt-0.5">27 ($3^3$)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experiment 2: Relational SQL Join Simulator -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-code-merge"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900">2. SQL Join Engine Simulator</h3>
+                            <p class="text-xs text-slate-500">Compare CROSS JOIN vs INNER JOIN vs LEFT JOIN on Set $A$ and Set $B$</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="runJoinSimulation('CROSS')" id="btnJoinCross" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-sm">
+                            CROSS JOIN (Product)
+                        </button>
+                        <button onclick="runJoinSimulation('INNER')" id="btnJoinInner" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300">
+                            INNER JOIN ($R$)
+                        </button>
+                        <button onclick="runJoinSimulation('LEFT')" id="btnJoinLeft" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300">
+                            LEFT JOIN ($A \ltimes R$)
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-900 rounded-xl p-3 text-slate-200 text-xs font-mono max-h-48 overflow-y-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-700 text-indigo-400">
+                                    <th class="p-1">Set A (Key)</th>
+                                    <th class="p-1">Set B (Matched)</th>
+                                    <th class="p-1">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="joinResultBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Practice Quiz Section -->
+    <section id="quiz" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-10">
+            <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-emerald-100 text-emerald-700">Knowledge Check</span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-2">Interactive Self-Assessment Quiz</h2>
+            <p class="text-slate-600 text-sm sm:text-base mt-2">Test your comprehension of set theory relations, cardinality calculations, matrices, and database mappings.</p>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 lg:p-8 max-w-4xl mx-auto space-y-8">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-graduation-cap text-indigo-600 text-xl"></i>
+                    <span class="text-base font-bold text-slate-800">Discrete Math &amp; SQL Quiz</span>
+                </div>
+                <div id="quizScoreBadge" class="bg-indigo-50 border border-indigo-200 text-indigo-700 font-bold px-4 py-1.5 rounded-full text-sm">
+                    Score: 0 / 6
+                </div>
+            </div>
+
+            <div id="quizQuestionsContainer" class="space-y-8">
+                <!-- Quiz Question 1 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                    <p class="font-bold text-slate-900 text-sm sm:text-base">
+                        1. If $|A| = 4$ and $|B| = 3$, what is the cardinality of the Cartesian Product $|A \times B|$?
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
+                        <button onclick="checkAnswer(0, 0)" class="q-opt-0 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">A) $7$</button>
+                        <button onclick="checkAnswer(0, 1)" class="q-opt-0 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">B) $12$</button>
+                        <button onclick="checkAnswer(0, 2)" class="q-opt-0 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">C) $64$</button>
+                        <button onclick="checkAnswer(0, 3)" class="q-opt-0 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">D) $81$</button>
+                    </div>
+                    <div id="qFeedback0" class="hidden p-3 rounded-xl text-xs sm:text-sm font-medium"></div>
+                </div>
+
+                <!-- Quiz Question 2 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                    <p class="font-bold text-slate-900 text-sm sm:text-base">
+                        2. How many total distinct binary relations can be constructed from set $A$ to set $B$ if $|A| = 3$ and $|B| = 3$?
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
+                        <button onclick="checkAnswer(1, 0)" class="q-opt-1 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">A) $9$</button>
+                        <button onclick="checkAnswer(1, 1)" class="q-opt-1 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">B) $27$</button>
+                        <button onclick="checkAnswer(1, 2)" class="q-opt-1 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">C) $512$ ($2^9$)</button>
+                        <button onclick="checkAnswer(1, 3)" class="q-opt-1 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">D) $1024$</button>
+                    </div>
+                    <div id="qFeedback1" class="hidden p-3 rounded-xl text-xs sm:text-sm font-medium"></div>
+                </div>
+
+                <!-- Quiz Question 3 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                    <p class="font-bold text-slate-900 text-sm sm:text-base">
+                        3. What is the fundamental difference between the Codomain and the Range of a relation $R \subseteq A \times B$?
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
+                        <button onclick="checkAnswer(2, 0)" class="q-opt-2 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">A) Range is Set $A$, Codomain is Set $B$</button>
+                        <button onclick="checkAnswer(2, 1)" class="q-opt-2 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">B) Codomain is the entire set $B$; Range is the subset of $B$ actually mapped by $R$</button>
+                        <button onclick="checkAnswer(2, 2)" class="q-opt-2 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">C) Range and Codomain are always strictly equal for all relations</button>
+                        <button onclick="checkAnswer(2, 3)" class="q-opt-2 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">D) Codomain only exists when $R$ is a function</button>
+                    </div>
+                    <div id="qFeedback2" class="hidden p-3 rounded-xl text-xs sm:text-sm font-medium"></div>
+                </div>
+
+                <!-- Quiz Question 4 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                    <p class="font-bold text-slate-900 text-sm sm:text-base">
+                        4. In a boolean relation matrix $M_R$, what does an entry $M_{ij} = 1$ represent?
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
+                        <button onclick="checkAnswer(3, 0)" class="q-opt-3 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">A) Element $a_i$ is NOT related to element $b_j$</button>
+                        <button onclick="checkAnswer(3, 1)" class="q-opt-3 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">B) The ordered pair $(a_i, b_j) \in R$</button>
+                        <button onclick="checkAnswer(3, 2)" class="q-opt-3 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">C) Element $a_i$ equals $b_j$</button>
+                        <button onclick="checkAnswer(3, 3)" class="q-opt-3 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">D) $a_i$ divides $b_j$ without remainder</button>
+                    </div>
+                    <div id="qFeedback3" class="hidden p-3 rounded-xl text-xs sm:text-sm font-medium"></div>
+                </div>
+
+                <!-- Quiz Question 5 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                    <p class="font-bold text-slate-900 text-sm sm:text-base">
+                        5. How is a binary relation $R \subseteq S \times C$ between Students and Courses represented in a relational database?
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
+                        <button onclick="checkAnswer(4, 0)" class="q-opt-4 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">A) A single column in the Student table</button>
+                        <button onclick="checkAnswer(4, 1)" class="q-opt-4 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">B) A junction table with composite primary key (student_id, course_code)</button>
+                        <button onclick="checkAnswer(4, 2)" class="q-opt-4 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">C) A JSON string inside the Course table</button>
+                        <button onclick="checkAnswer(4, 3)" class="q-opt-4 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">D) It cannot be represented in relational SQL</button>
+                    </div>
+                    <div id="qFeedback4" class="hidden p-3 rounded-xl text-xs sm:text-sm font-medium"></div>
+                </div>
+
+                <!-- Quiz Question 6 -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                    <p class="font-bold text-slate-900 text-sm sm:text-base">
+                        6. Which property guarantees that a relation $R \subseteq A \times B$ is a well-defined <strong>Function</strong> $f: A \to B$?
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
+                        <button onclick="checkAnswer(5, 0)" class="q-opt-5 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">A) Every element $a \in A$ is related to AT LEAST two elements in $B$</button>
+                        <button onclick="checkAnswer(5, 1)" class="q-opt-5 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">B) Every element $a \in A$ is related to EXACTLY ONE element $b \in B$</button>
+                        <button onclick="checkAnswer(5, 2)" class="q-opt-5 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">C) The Range equals the Domain</button>
+                        <button onclick="checkAnswer(5, 3)" class="q-opt-5 w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition">D) Set $A$ and Set $B$ have equal cardinalities</button>
+                    </div>
+                    <div id="qFeedback5" class="hidden p-3 rounded-xl text-xs sm:text-sm font-medium"></div>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-4 border-t border-slate-200">
+                <button onclick="resetQuiz()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white text-xs sm:text-sm font-semibold rounded-xl transition flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>Restart Quiz</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-400 py-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+            <div class="flex items-center justify-center space-x-2 text-white font-bold text-lg">
+                <i class="fa-solid font-mono text-indigo-400">A×B</i>
+                <span>Structural Relations Interactive Toolkit</span>
+            </div>
+            <p class="text-xs text-slate-500 max-w-xl mx-auto">
+                Designed for Discrete Mathematics students, Computer Science educators, and Database Engineers exploring mathematical foundations of relational algebra.
+            </p>
+            <p class="text-[11px] text-slate-600">
+                &copy; 2026 Educational Discrete Mathematics Project. Built with Tailwind CSS, MathJax &amp; SVG Data Visualizations.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Global Application State
+        let setA = [];
+        let setB = [];
+        let relationMatrix = []; // 2D array: relationMatrix[i][j] = 1 or 0
+        let quizAnswers = [1, 2, 1, 1, 1, 1]; // Correct option indices
+        let quizScore = [0, 0, 0, 0, 0, 0];
+        let quizExplanations = [
+            "Correct! The cardinality $|A \\times B| = |A| \\cdot |B| = 4 \\times 3 = 12$.",
+            "Correct! Total possible subsets (relations) is $2^{|A| \\cdot |B|} = 2^{3 \\times 3} = 2^9 = 512$.",
+            "Correct! Codomain is the entire target set $B$, while Range $\\text{Ran}(R) \\subseteq B$ is the subset of $B$ containing elements actually targeted by $R$.",
+            "Correct! In a boolean relation matrix, $M_{ij} = 1$ indicates that $(a_i, b_j) \\in R$.",
+            "Correct! In SQL databases, a many-to-many binary relation is implemented using a junction table with foreign keys to both entity tables.",
+            "Correct! A relation $R \\subseteq A \\times B$ is a function if every element $a \\in A$ is mapped to uniquely ONE element in $B$."
+        ];
+
+        // On Page Load Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            parseInputsAndUpdate();
+            updateCombinatorics();
+            runJoinSimulation('CROSS');
+
+            // Add Input Event Listeners
+            document.getElementById('inputSetA').addEventListener('input', parseInputsAndUpdate);
+            document.getElementById('inputSetB').addEventListener('input', parseInputsAndUpdate);
+            
+            // Re-render MathJax if loaded
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
+        });
+
+        function parseInputsAndUpdate() {
+            const rawA = document.getElementById('inputSetA').value;
+            const rawB = document.getElementById('inputSetB').value;
+
+            // Clean input sets
+            setA = rawA.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            setB = rawB.split(',').map(s => s.trim()).filter(s => s.length > 0);
+
+            // Deduplicate
+            setA = [...new Set(setA)];
+            setB = [...new Set(setB)];
+
+            // Fallback defaults if empty
+            if (setA.length === 0) setA = ['1'];
+            if (setB.length === 0) setB = ['1'];
+
+            // Initialize / resize relation matrix
+            let newMatrix = [];
+            for (let i = 0; i < setA.length; i++) {
+                newMatrix[i] = [];
+                for (let j = 0; j < setB.length; j++) {
+                    // Preserve old value if present, else default 0
+                    if (relationMatrix[i] && relationMatrix[i][j] !== undefined) {
+                        newMatrix[i][j] = relationMatrix[i][j];
+                    } else {
+                        newMatrix[i][j] = 0;
+                    }
+                }
+            }
+            relationMatrix = newMatrix;
+
+            renderMatrixGrid();
+            renderDigraphSvg();
+            updateAnalysisDashboard();
+            generateSqlOutput();
+        }
+
+        function applyPreset(presetType) {
+            for (let i = 0; i < setA.length; i++) {
+                for (let j = 0; j < setB.length; j++) {
+                    const numA = Number(setA[i]);
+                    const numB = Number(setB[j]);
+                    const isNum = !isNaN(numA) && !isNaN(numB);
+
+                    if (presetType === 'universal') {
+                        relationMatrix[i][j] = 1;
+                    } else if (presetType === 'empty') {
+                        relationMatrix[i][j] = 0;
+                    } else if (presetType === 'equal') {
+                        relationMatrix[i][j] = (setA[i] === setB[j]) ? 1 : 0;
+                    } else if (presetType === 'less') {
+                        relationMatrix[i][j] = (isNum ? numA < numB : setA[i] < setB[j]) ? 1 : 0;
+                    } else if (presetType === 'greater') {
+                        relationMatrix[i][j] = (isNum ? numA > numB : setA[i] > setB[j]) ? 1 : 0;
+                    } else if (presetType === 'divides') {
+                        if (isNum && numA !== 0 && numB % numA === 0) {
+                            relationMatrix[i][j] = 1;
+                        } else {
+                            relationMatrix[i][j] = 0;
+                        }
+                    }
+                }
+            }
+
+            renderMatrixGrid();
+            renderDigraphSvg();
+            updateAnalysisDashboard();
+            generateSqlOutput();
+        }
+
+        function renderMatrixGrid() {
+            const container = document.getElementById('matrixContainer');
+            let html = '<table class="border-collapse text-center text-xs font-mono mx-auto">';
+            
+            // Table Header (Set B elements)
+            html += '<thead><tr><th class="p-2 border border-slate-200 bg-slate-100 text-slate-500">$A \\setminus B$</th>';
+            for (let j = 0; j < setB.length; j++) {
+                html += `<th class="p-2 border border-slate-200 bg-slate-100 text-indigo-700 font-bold">${escapeHtml(setB[j])}</th>`;
+            }
+            html += '</tr></thead><tbody>';
+
+            // Table Body (Set A rows)
+            for (let i = 0; i < setA.length; i++) {
+                html += `<tr><td class="p-2 border border-slate-200 bg-slate-100 text-indigo-700 font-bold">${escapeHtml(setA[i])}</td>`;
+                for (let j = 0; j < setB.length; j++) {
+                    const isActive = relationMatrix[i][j] === 1;
+                    const activeClass = isActive ? 'grid-cell-active font-bold' : 'grid-cell-inactive';
+                    html += `<td onclick="toggleCell(${i}, ${j})" class="p-3 border border-slate-200 cursor-pointer transition select-none ${activeClass}">${relationMatrix[i][j]}</td>`;
+                }
+                html += '</tr>';
+            }
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function toggleCell(i, j) {
+            relationMatrix[i][j] = relationMatrix[i][j] === 1 ? 0 : 1;
+            renderMatrixGrid();
+            renderDigraphSvg();
+            updateAnalysisDashboard();
+            generateSqlOutput();
+        }
+
+        function renderDigraphSvg() {
+            const svg = document.getElementById('digraphSvg');
+            svg.innerHTML = ''; // Clear SVG
+
+            const width = svg.clientWidth || 500;
+            const height = svg.clientHeight || 300;
+
+            const leftX = width * 0.22;
+            const rightX = width * 0.78;
+
+            const radius = Math.min(18, Math.max(12, Math.floor(height / (Math.max(setA.length, setB.length) * 2.5))));
+
+            // SVG Arrow Definition
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            defs.innerHTML = `
+                <marker id="arrow" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#4f46e5" />
+                </marker>
+            `;
+            svg.appendChild(defs);
+
+            // Compute Node Positions
+            const nodePosA = [];
+            const stepA = height / (setA.length + 1);
+            for (let i = 0; i < setA.length; i++) {
+                nodePosA.push({ x: leftX, y: stepA * (i + 1) });
+            }
+
+            const nodePosB = [];
+            const stepB = height / (setB.length + 1);
+            for (let j = 0; j < setB.length; j++) {
+                nodePosB.push({ x: rightX, y: stepB * (j + 1) });
+            }
+
+            // Draw Edges / Arrows
+            for (let i = 0; i < setA.length; i++) {
+                for (let j = 0; j < setB.length; j++) {
+                    if (relationMatrix[i][j] === 1) {
+                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        const start = nodePosA[i];
+                        const end = nodePosB[j];
+                        
+                        // Bezier Curve
+                        const dx = (end.x - start.x) * 0.5;
+                        const d = `M ${start.x} ${start.y} C ${start.x + dx} ${start.y}, ${end.x - dx} ${end.y}, ${end.x} ${end.y}`;
+                        
+                        path.setAttribute('d', d);
+                        path.setAttribute('class', 'edge-active');
+                        path.setAttribute('fill', 'none');
+                        path.setAttribute('marker-end', 'url(#arrow)');
+                        svg.appendChild(path);
+                    }
+                }
+            }
+
+            // Draw Set A Nodes (Left Side)
+            for (let i = 0; i < setA.length; i++) {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', nodePosA[i].x);
+                circle.setAttribute('cy', nodePosA[i].y);
+                circle.setAttribute('r', radius);
+                circle.setAttribute('fill', '#4f46e5');
+                circle.setAttribute('class', 'transition duration-200');
+
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', nodePosA[i].x - radius - 8);
+                text.setAttribute('y', nodePosA[i].y + 4);
+                text.setAttribute('text-anchor', 'end');
+                text.setAttribute('font-size', '12px');
+                text.setAttribute('font-weight', 'bold');
+                text.setAttribute('fill', '#1e293b');
+                text.textContent = setA[i];
+
+                g.appendChild(circle);
+                g.appendChild(text);
+                svg.appendChild(g);
+            }
+
+            // Draw Set B Nodes (Right Side)
+            for (let j = 0; j < setB.length; j++) {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', nodePosB[j].x);
+                circle.setAttribute('cy', nodePosB[j].y);
+                circle.setAttribute('r', radius);
+                circle.setAttribute('fill', '#0284c7');
+                circle.setAttribute('class', 'transition duration-200');
+
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', nodePosB[j].x + radius + 8);
+                text.setAttribute('y', nodePosB[j].y + 4);
+                text.setAttribute('text-anchor', 'start');
+                text.setAttribute('font-size', '12px');
+                text.setAttribute('font-weight', 'bold');
+                text.setAttribute('fill', '#1e293b');
+                text.textContent = setB[j];
+
+                g.appendChild(circle);
+                g.appendChild(text);
+                svg.appendChild(g);
+            }
+        }
+
+        function updateAnalysisDashboard() {
+            const cartesianSize = setA.length * setB.length;
+            let activeCount = 0;
+            let targetedBIndices = new Set();
+            let rowCounts = new Array(setA.length).fill(0);
+
+            for (let i = 0; i < setA.length; i++) {
+                for (let j = 0; j < setB.length; j++) {
+                    if (relationMatrix[i][j] === 1) {
+                        activeCount++;
+                        targetedBIndices.add(j);
+                        rowCounts[i]++;
+                    }
+                }
+            }
+
+            document.getElementById('analysisCartesian').innerText = cartesianSize;
+            document.getElementById('analysisRelationSize').innerText = activeCount;
+
+            // Range Calculation
+            const rangeElements = Array.from(targetedBIndices).map(j => setB[j]);
+            const rangeStr = rangeElements.length > 0 ? `{ ${rangeElements.join(', ')} }` : '∅';
+            document.getElementById('analysisRange').innerText = rangeStr;
+
+            // Function & Injectivity Check
+            const isFunction = rowCounts.every(c => c === 1);
+            const isTotal = rowCounts.every(c => c >= 1);
+
+            let funcBadge = '';
+            let funcDesc = '';
+
+            if (isFunction) {
+                funcBadge = `<span class="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-md text-xs font-bold">Valid Function</span>`;
+                funcDesc = 'Every element in $A$ maps to exactly one element in $B$.';
+            } else if (isTotal) {
+                funcBadge = `<span class="bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-md text-xs font-bold">Multi-valued Relation</span>`;
+                funcDesc = 'Some elements in $A$ map to multiple targets in $B$.';
+            } else {
+                funcBadge = `<span class="bg-rose-100 text-rose-800 px-2.5 py-0.5 rounded-md text-xs font-bold">Not a Function</span>`;
+                funcDesc = 'Some elements in $A$ have no target mapping in $B$.';
+            }
+
+            document.getElementById('analysisFunction').innerHTML = funcBadge;
+            document.getElementById('analysisFunctionDesc').innerText = funcDesc;
+        }
+
+        function generateSqlOutput() {
+            let sql = `-- Auto-generated SQL Relational Junction Schema\n`;
+            sql += `CREATE TABLE relation_a_b (\n`;
+            sql += `  a_val VARCHAR(50) NOT NULL,\n`;
+            sql += `  b_val VARCHAR(50) NOT NULL,\n`;
+            sql += `  PRIMARY KEY (a_val, b_val)\n`;
+            sql += `);\n\n`;
+
+            let tuples = [];
+            for (let i = 0; i < setA.length; i++) {
+                for (let j = 0; j < setB.length; j++) {
+                    if (relationMatrix[i][j] === 1) {
+                        const safeA = setA[i].replace(/'/g, "''");
+                        const safeB = setB[j].replace(/'/g, "''");
+                        tuples.push(`('${safeA}', '${safeB}')`);
+                    }
+                }
+            }
+
+            if (tuples.length > 0) {
+                sql += `-- Populate Relation R (${tuples.length} active tuple pairs)\n`;
+                sql += `INSERT INTO relation_a_b (a_val, b_val) VALUES\n  ` + tuples.join(',\n  ') + `;\n`;
+            } else {
+                sql += `-- Relation R is currently empty (Empty Set ∅)\n`;
+            }
+
+            document.getElementById('sqlOutput').innerText = sql;
+        }
+
+        function copySqlToClipboard() {
+            const codeText = document.getElementById('sqlOutput').innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = codeText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            const copyBtnText = document.getElementById('copyBtnText');
+            copyBtnText.innerText = 'Copied!';
+            setTimeout(() => { copyBtnText.innerText = 'Copy SQL'; }, 2000);
+        }
+
+        function updateCombinatorics() {
+            const cardA = parseInt(document.getElementById('sliderA').value);
+            const cardB = parseInt(document.getElementById('sliderB').value);
+
+            document.getElementById('valCardA').innerText = cardA;
+            document.getElementById('valCardB').innerText = cardB;
+
+            const cartesian = cardA * cardB;
+            const totalRelations = BigInt(2) ** BigInt(cartesian);
+            const totalFunctions = BigInt(cardB) ** BigInt(cardA);
+
+            document.getElementById('resCartesianSize').innerText = cartesian;
+            document.getElementById('resTotalRelations').innerText = `${totalRelations.toLocaleString()} (2^${cartesian})`;
+            document.getElementById('resTotalFunctions').innerText = `${totalFunctions.toLocaleString()} (${cardB}^${cardA})`;
+        }
+
+        function runJoinSimulation(joinType) {
+            const tbody = document.getElementById('joinResultBody');
+            tbody.innerHTML = '';
+
+            // Update Active Buttons styling
+            document.getElementById('btnJoinCross').className = joinType === 'CROSS' ? 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-sm' : 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300';
+            document.getElementById('btnJoinInner').className = joinType === 'INNER' ? 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-sm' : 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300';
+            document.getElementById('btnJoinLeft').className = joinType === 'LEFT' ? 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-sm' : 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 text-slate-700 hover:bg-slate-300';
+
+            let rows = [];
+
+            if (joinType === 'CROSS') {
+                for (let i = 0; i < setA.length; i++) {
+                    for (let j = 0; j < setB.length; j++) {
+                        const isRelated = relationMatrix[i][j] === 1;
+                        rows.push({ a: setA[i], b: setB[j], status: isRelated ? 'Cartesian Tuple (In R)' : 'Cartesian Tuple (Not in R)' });
+                    }
+                }
+            } else if (joinType === 'INNER') {
+                for (let i = 0; i < setA.length; i++) {
+                    for (let j = 0; j < setB.length; j++) {
+                        if (relationMatrix[i][j] === 1) {
+                            rows.push({ a: setA[i], b: setB[j], status: 'Matched Tuple' });
+                        }
+                    }
+                }
+            } else if (joinType === 'LEFT') {
+                for (let i = 0; i < setA.length; i++) {
+                    let matched = false;
+                    for (let j = 0; j < setB.length; j++) {
+                        if (relationMatrix[i][j] === 1) {
+                            rows.push({ a: setA[i], b: setB[j], status: 'Matched Pair' });
+                            matched = true;
+                        }
+                    }
+                    if (!matched) {
+                        rows.push({ a: setA[i], b: 'NULL', status: 'Unmatched Left Element' });
+                    }
+                }
+            }
+
+            if (rows.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="p-2 text-slate-500 italic text-center">No tuple results found for this relation.</td></tr>';
+                return;
+            }
+
+            rows.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-slate-800 hover:bg-slate-800/50';
+                
+                let statusColor = 'text-slate-400';
+                if (r.status.includes('Matched')) statusColor = 'text-emerald-400 font-bold';
+                if (r.status.includes('NULL')) statusColor = 'text-rose-400 italic';
+
+                tr.innerHTML = `
+                    <td class="p-1.5 text-slate-200 font-bold">${escapeHtml(r.a)}</td>
+                    <td class="p-1.5 text-indigo-300">${escapeHtml(r.b)}</td>
+                    <td class="p-1.5 ${statusColor}">${r.status}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function checkAnswer(qIdx, optionIdx) {
+            const correctOpt = quizAnswers[qIdx];
+            const buttons = document.querySelectorAll(`.q-opt-${qIdx}`);
+            const feedbackBox = document.getElementById(`qFeedback${qIdx}`);
+
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-slate-100');
+                if (idx === correctOpt) {
+                    btn.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900', 'font-bold');
+                } else if (idx === optionIdx) {
+                    btn.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-900');
+                }
+            });
+
+            feedbackBox.classList.remove('hidden');
+            if (optionIdx === correctOpt) {
+                quizScore[qIdx] = 1;
+                feedbackBox.className = 'p-3 rounded-xl text-xs sm:text-sm font-medium bg-emerald-50 text-emerald-800 border border-emerald-200';
+                feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 me-1"></i> ${quizExplanations[qIdx]}`;
+            } else {
+                quizScore[qIdx] = 0;
+                feedbackBox.className = 'p-3 rounded-xl text-xs sm:text-sm font-medium bg-rose-50 text-rose-800 border border-rose-200';
+                feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 me-1"></i> Incorrect. ${quizExplanations[qIdx]}`;
+            }
+
+            const totalScore = quizScore.reduce((a, b) => a + b, 0);
+            document.getElementById('quizScoreBadge').innerText = `Score: ${totalScore} / 6`;
+
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function resetQuiz() {
+            quizScore = [0, 0, 0, 0, 0, 0];
+            document.getElementById('quizScoreBadge').innerText = `Score: 0 / 6`;
+
+            for (let qIdx = 0; qIdx < 6; qIdx++) {
+                const buttons = document.querySelectorAll(`.q-opt-${qIdx}`);
+                const feedbackBox = document.getElementById(`qFeedback${qIdx}`);
+
+                feedbackBox.classList.add('hidden');
+                feedbackBox.innerHTML = '';
+
+                buttons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.className = `q-opt-${qIdx} w-full text-left p-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 transition`;
+                });
+            }
+        }
+
+        // Utility Helper
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
